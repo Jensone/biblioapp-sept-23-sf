@@ -17,7 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'admin')]
+    #[Route('/', name: 'admin')]
     public function index(): Response
     {
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
