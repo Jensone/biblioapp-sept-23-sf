@@ -102,4 +102,10 @@ class Category
 
         return $this;
     }
+
+    // Convert to string
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }

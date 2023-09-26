@@ -127,4 +127,10 @@ class Author
 
         return $this;
     }
+
+    // Convert to string
+    public function __toString(): string
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
 }
