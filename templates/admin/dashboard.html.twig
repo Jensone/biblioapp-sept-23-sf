@@ -1,1 +1,15 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block main %}
+
+{% if app.user.isVerified == false %}
+    <div class="col-4 border rounded bg-light p-2 ">
+        <p>Hey, tu n'as toujours pas vérifié ton compte !</p>
+        <a href="#">Clique ici pour recevoir un nouveau mail de vérification</a>
+    </div>
+{% endif %}
+
+{{ "now"|date("Y") }}
+
+
+{% endblock %}

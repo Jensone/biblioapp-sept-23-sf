@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -81,4 +82,7 @@ class RegistrationController extends AbstractController
 
         return $this->redirectToRoute('admin');
     }
+
 }
+
+https://127.0.0.1:8000/verify/email?expires=1695806366&signature=P9k%2BFScMC53I9c2dv%2FMd7xdoRYN%2FnAIFYoHuQy8eJOQ%3D&token=5SI9t4hevCiqlZ3GZl73DBYJOfybmk4840RdRPaJMCI%3D
