@@ -38,16 +38,21 @@
                 }}
             </div> {# Fin du select #}
 
-            <div class="mb-3"> {# Début du textarea #}
-                {{ form_label(contact.message) }} {# Le label #}
+            {# {{ form_row(contact.message) }} #}
+
+            <div class="mb-3"> 
+                {{ form_label(contact.message) }} 
                 <div class="input-group">
                     <span class="input-group-text" id="basic-addon1"><i class="bi bi-chat-left-text"></i></span>
                     {{ form_widget(contact.message, {
-                        attr: {class: 'form-control'},
+                        attr: {
+                            class: 'form-control',
+                            rows: 5,
+                            },
                         }) 
-                    }} {# L'input avec son icône #}
+                    }} 
                 </div> 
-            </div> {# Fin du premier input #}
+            </div> 
 
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" name="consent" id="form-check">
