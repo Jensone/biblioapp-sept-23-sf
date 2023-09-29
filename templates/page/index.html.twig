@@ -3,7 +3,27 @@
 {% block title %}Hello PageController!{% endblock %}
 
 {% block body %}
+<h2 class="text-center mt-4">Liste des livres</h2>
+<div class="biblioapp-dashboard-books rounded p-3 m-4 d-flex gap-2 bg-light shadow switch-row">
 
-{{ dump(books) }}
+{% for item in books %}
+    <div class="card col-md-3 col-sm-5 col-sm-12 card-bg">
+        <div class="card-body text-light">
+            <h5 class="card-title">
+                {{ item.title }}
+            </h5>
+            <h6 class="card-subtitle mb-2">
+                {% for author in item.authors %}
+                    {{ author.firstname }} {{ author.lastname }}
+                {% endfor %}
+            </h6>
+            <p class="card-text">
+                {{ item.description|slice(0, 110) }}...
+            </p>
+            <a href={{ path('app_book_show', {id: item.id}) }} class="btn btn-sm btn-outline-light">Voir</a>
+            <a href="#" class="btn btn-sm btn-success">Réserver</a>
+        </div>
+    </div>
+{% endfor %}
 
 {% endblock %}
