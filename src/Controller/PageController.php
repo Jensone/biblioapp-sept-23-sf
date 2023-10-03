@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Form\ContactType;
 use App\Repository\BookRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class PageController extends AbstractController
 {
@@ -25,26 +28,37 @@ class PageController extends AbstractController
 
     #[Route('/contact', name: 'app_contact', methods: ['GET', 'POST'])]
     public function contact(
-        ContactType $form
+        ContactType $form,
+        Request $request,
+        MailerInterface $mailer
         ): Response
     {
         $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
 
-        // On reception les données du formulaire avec Request
+        if($form->isSubmitted() && $form->isValid()) {
+            $name = $form->get('name')->getData();
+            $email = $form->get('email')->getData();
+            $subject = $form->get('subject')->getData();
+            $message = $form->get('message')->getData();
+            
+            // On paramètre le mail
+            $mail = (new Email())
+                ->from($email)
+                ->to('contact@biblioapp.fr')
+                ->priority(Email::PRIORITY_HIGH)
+                ->subject($subject)
+                ->html(
+                    '<div>Vous avez reçu le message suivant de ' . $name . '. <br> Contenu :<br>' . $message . '</div>'
+                );
 
-        // Si le form est soumis et valide alors
-
-        // On récuprère les données du formulaire pour les mettre dans le mail
-
-        // On instancie un nouveau mail
-
-        // On paramètre le mail
-
-        // On envoie le mail
-
-        // On affiche un message de confirmation
-
-
+            // On envoie le mail
+            $mailer->send($mail);
+            
+            // On affiche un message de confirmation
+            $this->addFlash('success', 'Votre message a bien été envoyé !');
+            
+        }
 
 
 
