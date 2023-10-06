@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+<form method="post" action={{ path('app_login') }}>
+    <label for="inputEmail">Email</label>
+    <input type="email" name="email" id="inputEmail">
+
+    <button class="btn btn-primary" type="submit">
+        Envoyer le lien de connexion
+    </button>
+</form>
+{% endblock %}
