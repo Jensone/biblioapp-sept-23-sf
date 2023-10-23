@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
          */
         $objectAuthor = [];
         // Les auteurs
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $author = new Author();
             $author->setFirstname($faker->firstName())
                 ->setLastname($faker->lastName())
@@ -170,7 +170,7 @@ class AppFixtures extends Fixture
          * Les livres
          * Traitement pour l'ajout des livres
          */
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $book = new Book();
             $book->setTitle($faker->sentence(2)) // 2 mots
                 ->setDescription($faker->sentence(10)) // 7 mots
@@ -178,7 +178,7 @@ class AppFixtures extends Fixture
                 ->setPages($faker->numberBetween(50, 500)) // 50 à 500
                 ->setYear($faker->numberBetween(1950, 2023)) // 1950 à 2023
                 ->setCategory($objectCategory[rand(0, 7)]) // Ajout d'une catégorie aléatoire
-                ->addAuthor($objectAuthor[rand(0, 99)]) // Ajout d'un auteur aléatoire
+                ->addAuthor($objectAuthor[rand(0, 9)]) // Ajout d'un auteur aléatoire
                 ->setEditor($objectEditor[rand(0, 7)]) // Ajout d'un éditeur aléatoire
                 ->setFormat($objectFormat[rand(0, 2)]) // Ajout d'un format aléatoire
                 ->setLanguage($objectLanguage[rand(0, 7)]) // Ajout d'une langue aléatoire
@@ -189,7 +189,7 @@ class AppFixtures extends Fixture
             ;
 
             // On ajoute 40 clients aléatoirement qui ont emprunté le livre
-            if ($i < 40) {
+            if ($i < 10) {
                 $client = new Client();
                 $client->setFirstname($faker->firstName())
                     ->setLastname($faker->lastName())
