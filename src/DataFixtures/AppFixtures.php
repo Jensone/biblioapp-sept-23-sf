@@ -4,11 +4,13 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Book;
+use App\Entity\User;
+use App\Entity\Order;
 use App\Entity\Author;
+use App\Entity\Client;
 use App\Entity\Editor;
 use App\Entity\Format;
 use App\Entity\Category;
-use App\Entity\Client;
 use App\Entity\Language;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -19,6 +21,13 @@ class AppFixtures extends Fixture
     {
         // On instancie Faker pour générer des données aléatoires en français
         $faker = Factory::create($fakerLocale = 'fr_FR');
+
+        $user = new User();
+        $user->setEmail('hello@martin.fr')
+            ->setPassword('$2y$13$tbtgE82nEIciQHnsb7pu5.NCzLo8przS6w8aWvgEJxNC9xCRKOx02')
+            ->setRoles(['ROLE_ADMIN'])
+            ;
+        $manager->persist($user);
 
         /**
          * Les catégories
@@ -170,7 +179,9 @@ class AppFixtures extends Fixture
          * Les livres
          * Traitement pour l'ajout des livres
          */
-        for ($i = 0; $i < 200; $i++) {
+        $objectBook = [];
+        $objectClient = [];
+        for ($i = 0; $i < 50; $i++) {
             $book = new Book();
             $book->setTitle($faker->sentence(2)) // 2 mots
                 ->setDescription($faker->sentence(10)) // 7 mots
@@ -188,8 +199,13 @@ class AppFixtures extends Fixture
                 ->setIsAvailable($faker->boolean()) // Ajout d'un booléen aléatoire
             ;
 
+            // On ajoute 20 objets livre dans le tableau
+            if ($i < 20) {
+                array_push($objectBook, $book);
+            }
+
             // On ajoute 40 clients aléatoirement qui ont emprunté le livre
-            if ($i < 40) {
+            if ($i < 20) {
                 $client = new Client();
                 $client->setFirstname($faker->firstName())
                     ->setLastname($faker->lastName())
@@ -199,11 +215,36 @@ class AppFixtures extends Fixture
                     ->setYear($faker->numberBetween(1950, 2023))
                     ->addBook($book)
                     ->setDeposit($faker->boolean());
+
+                // On ajoute l'objet client dans le tableau
+                array_push($objectClient, $client);
                 // On persiste l'objet client
                 $manager->persist($client);
             }
             // On persiste l'objet livre
             $manager->persist($book);
+        }
+
+        /**
+         * Les commandes
+         * Traitement pour l'ajout des commandes
+         */
+        for ($i = 0; $i < 10; $i++) {
+            $order = new Order();
+            $order->setBuyer($user) // Ajout d'un client aléatoire
+                ->setDateStart($faker->dateTimeBetween('-6 months', 'now')) // Ajout d'une date aléatoire
+                ->setDateEnd($faker->dateTimeBetween('now', '+6 months')) // Ajout d'une date aléatoire
+                ->setStatut($faker->boolean()) // Ajout d'un booléen aléatoire
+                ->addBook($objectBook[rand(0, 10)]) // Ajout d'un livre aléatoire
+                ->setTotal(25.00)
+                ;
+
+                if ($i < 7){
+                    $order->addBook($objectBook[rand(11, 19)]); // Ajout d'un second livre aléatoire
+                }
+
+            // On persiste l'objet commande
+            $manager->persist($order);
         }
 
         // On envoie les données en BDD

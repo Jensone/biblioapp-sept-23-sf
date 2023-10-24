@@ -50,6 +50,18 @@
         </tbody>
     </table>
 
+    <div class="d-flex md-6 w-80 m-auto bg-info">
+        {{ form_start(orderForm) }} 
+            {{ form_row(orderForm.buyer,
+                { 
+                    'attr': {'value': app.user}
+                }          
+            ) }}
+            {{ form_row(orderForm.dateStart) }}
+            {{ form_row(orderForm.dateEnd) }}
+        {{ form_end(orderForm) }}
+    </div>
+
     <a href="{{ path('app_book_index') }}">back to list</a>
 
     <a href="{{ path('app_book_edit', {'id': book.id}) }}">edit</a>

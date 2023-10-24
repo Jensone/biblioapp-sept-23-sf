@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\Order;
 use App\Form\BookType;
+use App\Form\OrderType;
 use App\Repository\BookRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,11 +48,47 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_book_show', methods: ['GET'])]
-    public function show(Book $book): Response
+    #[Route('/{id}', name: 'app_book_show', methods: ['GET', 'POST'])]
+    public function show(
+        Book $book, 
+        Request $request, 
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager
+        ): Response
     {
+        $form = $this->createForm(OrderType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $start = $form->get('dateStart')->getData();
+            $end = $form->get('dateEnd')->getData();
+            $buyer = $userRepository->find(['id' => $form->get('buyer')->getData()]);
+
+            // dd($start, $end, $buyer);
+            // Calcul du total entre les deux dates * 2.5
+            $total = floatval($start->diff($end)->days * 2.5);
+            
+            // Création de la commande
+            $order = new Order();
+            $order->setDateStart($start)
+                ->setNumber(uuid_create())
+                ->setDateEnd($end)
+                ->setTotal($total)
+                ->setBuyer($buyer)
+                ->setStatut(false)
+                ;
+
+            $entityManager->persist($order);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('payment_session', [
+                'order' => $order,
+            ], Response::HTTP_SEE_OTHER);
+        }
+
         return $this->render('book/show.html.twig', [
             'book' => $book,
+            'orderForm' => $form,
         ]);
     }
 
